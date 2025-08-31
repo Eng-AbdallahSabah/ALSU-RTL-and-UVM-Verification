@@ -33,11 +33,14 @@ ALSU-RTL-and-UVM-Verification/
 │   ├── seq.sv
 │   ├── test.sv
 │   ├── coverage.sv
-│   └── interface.sv
+│   ├── interface.sv
+│   ├──top.sv
+│   ├──top.sv
+│   └──assertions.sv
 ├── testbench/            # Simple testbench for waveform/debug (alsu_tb.sv)
 ├── sim/                  # Simulation scripts (run.do)
-├── coverage_rpt.txt      # Coverage output (example)
-├── Screenshot 2025-09-01 010450.png
+├── coverage_rpt.txt      # Coverage output 
+├──images/                # Wave.png
 └── LICENSE
 ```
 
@@ -86,7 +89,7 @@ vsim -do sim/run.do
 Below is a waveform captured using **QuestaSim**, showing the write and read operations on the RAM.  
 The simulation confirms correct memory behavior across different clock cycles.
 
-![Simulation Waveform](results/Wave.png)
+![Simulation Waveform](images/Wave.png)
 
 ---
 
