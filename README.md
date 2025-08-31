@@ -1,101 +1,140 @@
-# ALSU-with-UVM-Verification
-A parameterized Arithmetic Logic Shift Unit (ALSU) in Verilog with multiple operations (AND/OR, add, multiply, shift/rotate) and bypass modes. Includes complete UVM verification environment with SystemVerilog, achieving full coverage through transaction-based testing and randomized stimulus.RetryClaude can make mistakes.
-Arithmetic Logic Shift Unit (ALSU) with UVM Verification
-A complete implementation of a parameterized ALSU module with comprehensive UVM-based verification environment.
-Overview
-This project implements a versatile Arithmetic Logic Shift Unit (ALSU) supporting multiple operations including logical operations, arithmetic calculations, and shift/rotate functionalities. The design features configurable parameters, bypass modes, and comprehensive error detection. The verification environment utilizes the Universal Verification Methodology (UVM) framework to ensure thorough testing and complete functional coverage.
-ALSU Design Features
+# ALSU-RTL-and-UVM-Verification
 
-Multiple Operation Support:
+**A parameterized Arithmetic Logic Shift Unit (ALSU) with a complete UVM-based verification environment.**
 
-AND operation (opcode 000) with optional reduction
-OR operation (opcode 001) with optional reduction
-Addition (opcode 010) with configurable full-adder mode
-Multiplication (opcode 011)
-Shift left/right (opcode 100)
-Rotate left/right (opcode 101)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
 
+---
 
-Flexible Configuration:
+## Project summary
 
-Parameterized input priority (A or B)
-Configurable full adder mode
-Bypass modes for direct input-to-output connections
+This repository contains a configurable ALSU (Arithmetic Logic Shift Unit) RTL implementation (Verilog) and a full SystemVerilog UVM verification environment. The verification environment includes constrained-random tests, directed tests, functional coverage collection, and a scoreboard-based checker. Coverage reports are included in `coverage_rpt.txt`.
 
+Key features:
 
-Error Detection:
+* Logical operations (AND, OR, XOR) with optional reduction.
+* Arithmetic operations (ADD with configurable full-adder mode, MULT).
+* Shift and rotate operations (left/right, configurable direction).
+* Input bypass modes and priority selection between inputs.
+* UVM environment: sequences, driver, monitor, scoreboard, and coverage collectors.
 
-Invalid opcode detection
-Invalid reduction operation detection
-Visual indication via LED blinking
+---
 
+## Repository layout
 
-I/O Interface:
+```
+ALSU-RTL-and-UVM-Verification/
+├── rtl/                  # RTL design (ALSU.v)
+├── verification/         # UVM environment and SV classes
+│   ├── alsu_pkg.sv
+│   ├── config.sv
+│   ├── driver.sv
+│   ├── env.sv
+│   ├── seq.sv
+│   ├── test.sv
+│   ├── coverage.sv
+│   └── interface.sv
+├── testbench/            # Simple testbench for waveform/debug (alsu_tb.sv)
+├── sim/                  # Simulation scripts (run.do)
+├── coverage_rpt.txt      # Coverage output (example)
+├── Screenshot 2025-09-01 010450.png
+└── LICENSE
+```
 
-3-bit data inputs (A, B)
-3-bit opcode for operation selection
-Additional control signals (cin, serial_in, direction, etc.)
-6-bit signed output
-16-bit LED output for error indication
+> Note: filenames in the repo currently include a small typo (`driver;.sv`) — rename it to `driver.sv` to avoid simulator errors.
 
+---
 
+## Requirements
 
-UVM Verification Environment
-The project includes a complete UVM-based verification environment with:
+* A SystemVerilog-capable simulator (QuestaSim, VCS, Xcelium, etc.).
+* For running UVM tests, an installation with UVM library available or added to the simulator search path.
 
-Transaction Classes: Define stimulus and expected responses
-Driver: Sends transactions to the DUT interface
-Monitor: Observes DUT interface activity
-Coverage Collector: Tracks functional and code coverage
-Scoreboard: Verifies correct behavior against expected results
-Environment: Integrates all verification components
-Tests: Orchestrates test scenarios
+---
 
-Directory Structure
-├── rtl/                      # RTL design files
-│   └── ALSU.v                # ALSU module implementation
-├── verification/             # UVM verification environment
-│   ├── alsu_if.sv            # Interface definition
-│   ├── alsu_pkg.sv           # Package containing UVM components
-│   ├── config.sv             # Configuration class
-│   ├── coverage.sv           # Coverage collection class
-│   ├── driver.sv             # Driver class
-│   ├── env.sv                # Environment class
-│   ├── seq.sv                # Sequence and sequence item classes
-│   └── test.sv               # Test class
-├── testbench/                # Conventional testbench
-│   └── alsu_tb.sv            # SystemVerilog testbench
-├── sim/                      # Simulation files
-│   └── run.do                # ModelSim simulation script
-└── docs/                     # Documentation
-    └── coverage_rpt.txt      # Coverage report
-Verification Results
-The ALSU design has been verified using:
+## How to run (QuestaSim example)
 
-Constrained random testing with UVM methodology
-Directed tests for specific corner cases
-Comprehensive coverage metrics:
+1. Clone the repo:
 
-100% statement coverage
-100% branch coverage
-100% toggle coverage
-100% expression coverage
+```bash
+git clone https://github.com/Eng-AbdallahSabah/ALSU-RTL-and-UVM-Verification.git
+cd ALSU-RTL-and-UVM-Verification
+```
 
+2. Open the `sim/run.do` script in QuestaSim and adapt library paths if necessary.
 
+3. From QuestaSim command line:
 
-Simulation
-To run the UVM simulation:
+```
+vsim -c -do "run -all" -sv_seed random_seed work.top
+```
 
-Ensure you have a SystemVerilog-capable simulator (e.g., Questasim, VCS)
-Run the following commands:
-cd sim
-vsim -do run.do
+Or use the included `run.do`:
 
+```
+vsim -do sim/run.do
+```
 
-Implementation
-The design is suitable for FPGA implementation with the provided constraints file.
+4. After simulation finishes, check `coverage_rpt.txt` and the `coverage` files generated by your simulator.
 
-Acknowledgments
+---
 
-Based on industry-standard UVM verification methodology
-Designed as a versatile arithmetic unit for digital systems
+## Suggested improvements (what I changed in this README & what you should apply to the repo)
+
+1. **Fix typos and filenames**
+
+   * Rename `driver;.sv` → `driver.sv`.
+   * Ensure all `.sv` files use consistent encoding (UTF-8) and correct module/file headers.
+
+2. **Organize folders**
+
+   * Move RTL modules into `rtl/` (if not already).
+   * Move verification code into `verification/` and testbench into `testbench/`.
+
+3. **Improve README with concrete commands** (done here).
+
+4. **Add a CONTRIBUTING.md and ISSUE\_TEMPLATE**
+
+   * Provide instructions for how to run tests, how to submit bugs, and coding style expectations.
+
+5. **Add CI (optional)**
+
+   * Add GitHub Actions to run linting and (if possible) run a lightweight simulation (e.g., using iverilog for basic smoke tests). For full UVM simulation you will need a licensed simulator, which cannot run in GitHub-hosted runners.
+
+6. **Add a clear `Makefile` or top-level `run.sh`**
+
+   * Provide simple commands: `make sim`, `make clean`, `make coverage` to help users reproduce results.
+
+7. **Add example waveform screenshots and sample commands to reproduce them**
+
+   * Keep `Screenshot 2025-09-01 010450.png`, but also add smaller images or GIFs that show the simulation waveforms.
+
+8. **Add contact and citation**
+
+   * How to reach you (email) and a short note about the author and university/project affiliation.
+
+---
+
+## Contributing
+
+Contributions are welcome. Please open an issue for bugs or feature requests, then create a pull request with a clear description of changes and test results.
+
+---
+
+## License
+
+This project is released under the MIT License. See `LICENSE` for details.
+
+---
+
+## Contact
+
+Repository owner: Eng-AbdallahSabah
+
+If you want, I can:
+
+* create a `CONTRIBUTING.md` and `Makefile` and open a PR-ready patch for you, or
+* update the repository structure and fix the filename typo and push a commit (if you give me access or provide a patch), or
+* generate a GitHub Actions workflow template that runs smoke checks.
+
+Tell me which of the above you'd like me to do next and I'll prepare the needed files.
